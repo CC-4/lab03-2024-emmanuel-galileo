@@ -129,13 +129,46 @@ public class Parser {
 
     }
 
+    S ::= E;
+    E ::= T E';
+    E' ::= + T E'
+        |   - T E'
+        |   ε
+    T ::= F T';
+    T' ::= * F T'
+        |   / F T'
+        |   % F T'
+        |   ε
+    F ::= P F';
+    F' ::= ^ P F'
+        |   ε
+    P ::= - P
+    |   ( E )
+    |   number
+
+
     private boolean S() {
         return E() && term(Token.SEMI);
     }
 
     private boolean E() {
+        int save = this.next;
+        this.next = save;
+
+        next = save;
+        if (E1()) return true;
         return false;
     }
+
+    private boolean E() {
+        int save = this.next;
+        this.next = save;
+
+        next = save;
+        if (E1()) return true;
+        return false;
+    }
+
 
     /* TODO: sus otras funciones aqui */
 }
