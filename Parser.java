@@ -96,22 +96,22 @@ public class Parser {
         		return 3;
         	case Token.UNARY:
         		return 4;
-        	case Token.LPAREN:
-        		return 5;
-        	case Token.RPAREN:
-        		return 5;
+
         	default:
         		return -1;
         }
     }
 
     private void popOp() {
+        //System.out.println(this.operandos);
+        //System.out.println(this.operadores);
+
         Token op = this.operadores.pop();
+                            //System.out.println(this.operadores);
 
         /* TODO: Su codigo aqui */
 
         /* El codigo de esta seccion se explicara en clase */
-
         if (op.equals(Token.PLUS)) {
         	double a = this.operandos.pop();
         	double b = this.operandos.pop();
@@ -124,6 +124,12 @@ public class Parser {
         	// print para debug, quitarlo al terminar
         	System.out.println("mult " + a + " * " + b);
         	this.operandos.push(a * b);
+        } else if (op.equals(Token.MINUS)) {
+        	double a = this.operandos.pop();
+        	double b = this.operandos.pop();
+        	// print para debug, quitarlo al terminar
+        	System.out.println("resta " + b + " - " + a);
+        	this.operandos.push(b - a);
         } else if (op.equals(Token.DIV)) {
         	double a = this.operandos.pop();
         	double b = this.operandos.pop();
@@ -134,14 +140,14 @@ public class Parser {
         	double a = this.operandos.pop();
         	double b = this.operandos.pop();
         	// print para debug, quitarlo al terminar
-        	System.out.println("mod " + a + " % " + b);
-        	this.operandos.push(a % b);
+        	System.out.println("mod " + b + " % " + a);
+        	this.operandos.push(b % a);
         } else if (op.equals(Token.EXP)) {
         	double a = this.operandos.pop();
         	double b = this.operandos.pop();
         	// print para debug, quitarlo al terminar
-        	System.out.println("exp " + a + " ^ " + b);
-        	this.operandos.push(Math.pow(a, b));
+        	System.out.println("exp " + b + " ^ " + a);
+        	this.operandos.push(Math.pow(b, a));
 
         } else if (op.equals(Token.UNARY)) {
         	double a = this.operandos.pop();
@@ -154,18 +160,28 @@ public class Parser {
     }
 
     private void pushOp(Token op) {
+                    //System.out.println(this.operadores);
+
+        
         /* TODO: Su codigo aqui */
-
-        /* Casi todo el codigo para esta seccion se vera en clase */
-    	if (this.operadores.empty() || op.equals(Token.LPAREN)) {
-            this.operadores.push(op);
-        } else {
-            int pre = pre(op);
-            int prepre = pre(this.operadores.peek());
-            while (pre <= prepre && !this.operadores.empty()) popOp();
-            this.operadores.push(op);
-
+        if (op.equals(Token.RPAREN)) {
+            while (!this.operadores.isEmpty() && !this.operadores.peek().equals(Token.LPAREN)) {
+                popOp();
+            }
+            if (!this.operadores.isEmpty() && this.operadores.peek().equals(Token.LPAREN)) {
+                this.operadores.pop();
+            }
+            return;
         }
+        /* Casi todo el codigo para esta seccion se vera en clase */
+        if (op.equals(Token.LPAREN)) {
+            this.operadores.push(op);
+            return;
+        }
+
+        while (!this.operadores.isEmpty() && pre(op) <= pre(this.operadores.peek()) && !this.operadores.peek().equals(Token.LPAREN))  popOp();
+
+        this.operadores.push(op);
     	// Si no hay operandos automaticamente ingresamos op al stack
 
     	// Si si hay operandos:
