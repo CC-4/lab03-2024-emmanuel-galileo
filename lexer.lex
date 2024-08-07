@@ -104,9 +104,9 @@ UNARY = "~"
 
 <YYINITIAL>{WHITE}  { /* NO HACER NADA */             }
 
-<YYINITIAL>{PLUS}   { return new Token(Token.PLUS);   }
 <YYINITIAL>{MINUS}   { return new Token(Token.MINUS);   }
 <YYINITIAL>{DIV}   { return new Token(Token.DIV);   }
+<YYINITIAL>{MULT}   { return new Token(Token.MULT);   }
 <YYINITIAL>{MOD}   { return new Token(Token.MOD);   }
 <YYINITIAL>{EXP}   { return new Token(Token.EXP);   }
 <YYINITIAL>{LPAREN}   { return new Token(Token.LPAREN);   }

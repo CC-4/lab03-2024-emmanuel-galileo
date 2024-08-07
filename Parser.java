@@ -33,7 +33,7 @@ public class Parser {
 
         // Shunting Yard Algorithm
         // Imprime el resultado de operar el input
-        // System.out.println("Resultado: " + this.operandos.peek());
+        //System.out.println("Resultado: " + this.operandos.peek());
 
         // Verifica si terminamos de consumir el input
         if(this.next != this.tokens.size()) {
@@ -137,132 +137,108 @@ public class Parser {
     }
 
     private boolean E() {
-        int save = this.next;
-        this.next = save;
-
-        next = save;
-        if (E1()) return true;
-        return false;
+        return T() && E_();
     }
 
-    private boolean E1() {
-        return (T() && F());
-    }
-
-    private boolean F() {
-        int save = this.next;
-        this.next = save;
-
+    private boolean E_() {
+        int save = next;
+        if (E_1()) return true;
         next = save;
-        if (F1()) return true;
-        next = save;
-        if (F2()) return true;
+        if (E_2()) return true;
         return true;
     }
 
-    private boolean F1() {
-        return (term(Token.PLUS) && T() && F());
+    private boolean E_1() {
+        return term(Token.PLUS) && T() && E_();
     }
 
-    private boolean F2() {
-        return (term(Token.MINUS) && T() && F());
+    private boolean E_2() {
+        return term(Token.MINUS) && T() && E_();
     }
 
     private boolean T() {
-        int save = this.next;
-        this.next = save;
-
-        next = save;
-        if (T1()) return true;
-        return false;
+        return F() && T_();
     }
 
-    private boolean T1() {
-        return (F() && G());
+    private boolean T_() {
+        int save = next;
+        if (T_1()) return true;
+        next = save;
+        if (T_2()) return true;
+        next = save;
+        if (T_3()) return true;
+        return true;
+    }
+
+    private boolean T_1() {
+        return term(Token.MULT) && F() && T_();
+    }
+
+    private boolean T_2() {
+        return term(Token.DIV) && F() && T_();
+    }
+
+    private boolean T_3() {
+        return term(Token.MOD) && F() && T_();
+    }
+
+    private boolean F() {
+        return G() && F_();
+    }
+
+    private boolean F_() {
+        int save = next;
+        if (F_1()) return true;
+        return true;
+    }
+
+    private boolean F_1() {
+        return term(Token.EXP) && G() && F_();
     }
 
     private boolean G() {
-        int save = this.next;
-        this.next = save;
-
-        next = save;
+        int save = next;
         if (G1()) return true;
         next = save;
         if (G2()) return true;
         next = save;
         if (G3()) return true;
-        return true;
+        return false;
     }
 
     private boolean G1() {
-        return (term(Token.MULT) && F() && G());
+        return term(Token.UNARY) && H();
     }
 
     private boolean G2() {
-        return (term(Token.DIV) && F() && G());
+        return term(Token.LPAREN) && E() && term(Token.RPAREN);
     }
 
     private boolean G3() {
-        return (term(Token.MOD) && F() && G());
-    }
-
-    private boolean U() {
-        int save = this.next;
-        this.next = save;
-
-        next = save;
-        if (U1()) return true;
-        return false;
-    }
-
-    private boolean U1() {
-        return (P() && H());
+        return term(Token.NUMBER);
     }
 
     private boolean H() {
-        int save = this.next;
-        this.next = save;
-
-        next = save;
+        int save = next;
         if (H1()) return true;
-        return true;
-    }
-
-    private boolean H1() {
-        return (term(Token.EXP) && P() && H());
-    }
-
-    private boolean P() {
-        int save = this.next;
-        this.next = save;
-
         next = save;
-        if (P1()) return true;
+        if (H2()) return true;
         next = save;
-        if (P2()) return true;
-        next = save;
-        if (P3()) return true;
+        if (H3()) return true;
         return false;
     }
 
-    private boolean P1() {
-        return (term(Token.UNARY) && P());
+    private boolean H1() {
+        return term(Token.LPAREN) && E() && term(Token.RPAREN);
     }
 
-    private boolean P2() {
-        return (term(Token.LPAREN) && E() && term(Token.RPAREN));
+    private boolean H2() {
+        return term(Token.NUMBER);
     }
 
-    private boolean P3() {
-        return (term(Token.NUMBER));
+    private boolean H3() {
+        return G();
     }
-
-
-
-
-
-
-
 
     /* TODO: sus otras funciones aqui */
 }

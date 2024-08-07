@@ -1,18 +1,28 @@
-    S ::= E;
-    E ::= T F;
-    F ::= + T F
-        |   - T F
-        |   ε
-    T ::= F G;
-    G ::= * F G
-        |   / F G
-        |   % F G
-        |   ε
-    U ::= P H;
-    H ::= ^ P H
-        |   ε
-    P ::= - P
-    |   ( E )
-    |   number 
+S ::= E ;
+
+E ::= T E_
+E_ ::= + T E_
+     | - T E_
+     | ε
+
+T ::= F T_
+T_ ::= * F T_
+     | / F T_
+     | % F T_
+     | ε
+
+F ::= G F_
+F_ ::= ^ G F_
+     | ε
+
+G ::= - H
+    | ( E )
+    | number
+
+H ::= ( E )
+    | number
+    | G
+
+
 
     
